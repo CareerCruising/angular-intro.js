@@ -1,3 +1,7 @@
+##cc-angular-intro.js
+>This is a simple fork of [intro.js](http://usablica.github.io/intro.js/) which changes the dependency of intro.js to 
+[cc-intro.js](https://github.com/CareerCruising/intro.js)
+
 angular-intro.js [![Build Status](https://travis-ci.org/mendhak/angular-intro.js.svg?branch=master)](https://travis-ci.org/mendhak/angular-intro.js)
 ================
 
