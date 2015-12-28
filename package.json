@@ -1,6 +1,6 @@
 {
   "name": "angular-intro.js",
-  "version": "0.1.0",
+  "version": "1.3.2",
   "description": "Angular directive to wrap intro.js",
   "main": "src/angular-intro.js",
   "directories": {
@@ -25,6 +25,9 @@
     "url": "https://github.com/mendhak/angular-intro.js/issues"
   },
   "homepage": "https://github.com/mendhak/angular-intro.js",
+  "dependencies": {
+    "intro.js": "https://github.com/CareerCruising/intro.js#1.3.2"
+  },
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-cli": "~0.1.13",
