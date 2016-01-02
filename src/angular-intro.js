@@ -1,122 +1,126 @@
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(["angular", "intro.js"], factory);
-    } else if (typeof exports === 'object') {
-        module.exports = factory(require('angular'), require('intro.js'));
-    } else {
-        root.angularIntroJs = factory(root.angular, root.introJs);
-    }
-}(this, function (angular, introJs) {
+var angular = require('angular');
+var introJs = require('intro.js');
+(function (angular, introJs) {
 
 
-    var ngIntroDirective = angular.module('angular-intro', []);
+  var ngIntroDirective = angular.module('angular-intro', []);
 
 
-    ngIntroDirective.directive('ngIntroOptions', ['$timeout', function ($timeout) {
+  ngIntroDirective.directive('ngIntroOptions', ['$timeout', function ($timeout) {
 
-        return {
-            restrict: 'A',
-            scope: {
-                ngIntroMethod: "=",
-                ngIntroExitMethod: "=?",
-                ngIntroOptions: '=',
-                ngIntroOncomplete: '=',
-                ngIntroOnexit: '=',
-                ngIntroOnchange: '=',
-                ngIntroOnbeforechange: '=',
-                ngIntroOnafterchange: '=',
-                ngIntroAutostart: '=',
-                ngIntroAutorefresh: '='
-            },
-            link: function(scope, element, attrs) {
+    return {
+      restrict: 'A',
+      scope: {
+        ngIntroMethod: "=",
+        ngIntroExitMethod: "=?",
+        ngIntroOptions: '=',
+        ngIntroOncomplete: '=',
+        ngIntroOnexit: '=',
+        ngIntroOnchange: '=',
+        ngIntroOnbeforechange: '=',
+        ngIntroOnafterchange: '=',
+        ngIntroAutostart: '=',
+        ngIntroAutorefresh: '='
+      },
+      link: function (scope, element, attrs) {
 
-                var intro;
+        var intro;
 
-                scope.ngIntroMethod = function(step) {
+        scope.ngIntroMethod = function (step) {
 
 
-                    var navigationWatch = scope.$on('$locationChangeStart', function(){
-                      intro.exit();
-                    });
+          var navigationWatch = scope.$on('$locationChangeStart', function () {
+            intro.exit();
+          });
 
-                    if (typeof(step) === 'string') {
-                        intro = introJs(step);
+          if (typeof(step) === 'string') {
+            intro = introJs(step);
 
-                    } else {
-                        intro = introJs();
-                    }
+          } else {
+            intro = introJs();
+          }
 
-                    intro.setOptions(scope.ngIntroOptions);
+          intro.setOptions(scope.ngIntroOptions);
 
-                    if (scope.ngIntroAutorefresh) {
-                      scope.$watch(function(){
-                        intro.refresh();
-                      });
-                    }
+          if (scope.ngIntroAutorefresh) {
+            scope.$watch(function () {
+              intro.refresh();
+            });
+          }
 
-                    if (scope.ngIntroOncomplete) {
-                        intro.oncomplete(function() {
-                            scope.ngIntroOncomplete.call(this, scope);
-                            $timeout(function() {scope.$digest()});
-                            navigationWatch();
-                        });
-                    }
+          if (scope.ngIntroOncomplete) {
+            intro.oncomplete(function () {
+              scope.ngIntroOncomplete.call(this, scope);
+              $timeout(function () {
+                scope.$digest()
+              });
+              navigationWatch();
+            });
+          }
 
-                    if (scope.ngIntroOnexit) {
-                        intro.onexit(function() {
-                            scope.ngIntroOnexit.call(this, scope);
-                            $timeout(function() {scope.$digest()});
-                            navigationWatch();
-                        });
-                    }
+          if (scope.ngIntroOnexit) {
+            intro.onexit(function () {
+              scope.ngIntroOnexit.call(this, scope);
+              $timeout(function () {
+                scope.$digest()
+              });
+              navigationWatch();
+            });
+          }
 
-                    if (scope.ngIntroOnchange) {
-                        intro.onchange(function(targetElement){
-                            scope.ngIntroOnchange.call(this, targetElement, scope);
-                            $timeout(function() {scope.$digest()});
-                        });
-                    }
+          if (scope.ngIntroOnchange) {
+            intro.onchange(function (targetElement) {
+              scope.ngIntroOnchange.call(this, targetElement, scope);
+              $timeout(function () {
+                scope.$digest()
+              });
+            });
+          }
 
-                    if (scope.ngIntroOnbeforechange) {
-                        intro.onbeforechange(function(targetElement) {
-                            scope.ngIntroOnbeforechange.call(this, targetElement, scope);
-                            $timeout(function() {scope.$digest()});
-                        });
-                    }
+          if (scope.ngIntroOnbeforechange) {
+            intro.onbeforechange(function (targetElement) {
+              scope.ngIntroOnbeforechange.call(this, targetElement, scope);
+              $timeout(function () {
+                scope.$digest()
+              });
+            });
+          }
 
-                    if (scope.ngIntroOnafterchange) {
-                        intro.onafterchange(function(targetElement){
-                            scope.ngIntroOnafterchange.call(this, targetElement, scope);
-                            $timeout(function() {scope.$digest()});
-                        });
-                    }
+          if (scope.ngIntroOnafterchange) {
+            intro.onafterchange(function (targetElement) {
+              scope.ngIntroOnafterchange.call(this, targetElement, scope);
+              $timeout(function () {
+                scope.$digest()
+              });
+            });
+          }
 
-                    if (typeof(step) === 'number') {
-                        intro.goToStep(step).start();
-                    } else {
-                        intro.start();
-                    }
-                };
-
-                scope.ngIntroExitMethod = function (callback) {
-                    intro.exit();
-                    callback();
-                };
-
-                var autoStartWatch = scope.$watch('ngIntroAutostart', function (){
-                    if(scope.ngIntroAutostart){
-                        $timeout(function() {
-                            scope.ngIntroMethod();
-                        });
-                    }
-                    autoStartWatch();
-                });
-            }
+          if (typeof(step) === 'number') {
+            intro.goToStep(step).start();
+          } else {
+            intro.start();
+          }
         };
-    }]);
 
-    return ngIntroDirective;
+        scope.ngIntroExitMethod = function (callback) {
+          intro.exit();
+          callback();
+        };
 
-}));
+        var autoStartWatch = scope.$watch('ngIntroAutostart', function () {
+          if (scope.ngIntroAutostart) {
+            $timeout(function () {
+              scope.ngIntroMethod();
+            });
+          }
+          autoStartWatch();
+        });
+      }
+    };
+  }]);
+
+  return ngIntroDirective;
+
+})(angular, introJs.introJs)
 
 
